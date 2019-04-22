@@ -19,18 +19,21 @@ class List extends Component {
     };
 
     render(){
+
         let order = [];
-        // const cards = this.props.fetchCards.filter(card => card.listId === this.props.fetchCards);
-        // console.log(cards)
-        this.props.fetchCards.map(card => {
-            return this.props.cardOrder.map(item => {
-                if(item === card.id){
-                order = [...order, card];//order-> cards
+        this.props.cardOrder.map(item => {
+                if (item.listId === this.props.listId ) {
+                    item.cards.map(cardId => {
+                        return this.props.fetchCards.map(card => {
+                            if (cardId === card.id) {
+                                order = [...order, card];
+                            }
+                        });
+                    })
                 }
-            })
         });
         return (
-            <Draggable draggableId={this.props.listId+'ul'} index={this.props.index}>
+            <Draggable draggableId={this.props.listId+'list'} index={this.props.index}>
                 { provided => (
                     <div className="list"
                          {...provided.draggableProps}
@@ -42,11 +45,8 @@ class List extends Component {
                                 <ul className="list-items"   ref={provided.innerRef}
                                     {...provided.droppableProps}
                                 >
-                                    {
-
-                                    }
                                     {order.map(( card, index ) => {
-                                        return <Card card={card} key={card.label} id={card.id} index={index}/>
+                                        return <Card card={card} key={card.label+index} id={card.id} index={index}/>
                                     })}
                                     {provided.placeholder}
                                 </ul>

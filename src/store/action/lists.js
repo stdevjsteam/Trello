@@ -12,14 +12,21 @@ export const lists = () => {
 };
 
 
-export const addList = title => {
+export const addList = values => {
     return dispatch => {
-        axios.post('/lists',{ title })
+        axios.post('/lists',{ title: values.title })
         .then(res => {
            dispatch({type: 'LIST_ADDED', payload: res.data});
         }).catch(e => {
             console.log(e);
         });
+        console.log(values); //continue...
+        // axios.post('/listOrder/1',{ title })
+        //     .then(res => {
+        //         dispatch({type: 'LIST_ORDER_ADDED', payload: res.data});
+        //     }).catch(e => {
+        //     console.log(e);
+        // });
     }
 };
 
@@ -49,3 +56,4 @@ export const changeListOrder = (lastIndex,currentIndex, order) => {
         });
     }
 };
+

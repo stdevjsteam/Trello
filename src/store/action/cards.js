@@ -25,47 +25,40 @@ export const addCard = (label, listId) => {
 
 
 export const cardOrder = () => {
-    let newOrder = [];
     return dispatch => {
-        axios.get('/cardOrder')
+        axios.get('/cardOrder/1')
             .then(res => {
-                res.data.map( item => {
-                    return item.cards.map(cardId => newOrder = [...newOrder, cardId]);
-                });
-                dispatch({type: 'CARD_ORDER_FETCHED', payload: newOrder});
+                dispatch({type: 'CARD_ORDER_FETCHED', payload: res.data.cards});
             }).catch(e => {
             console.log(e)
         });
     };
 };
 
-// export const changeCardOrder = (lastIndex, currentIndex, order) => {
-//     return dispatch => {
-//         axios.put('/cardsOrder')
-//             .then(res => {
-//                 dispatch({type: 'CARD_ORDER_UPDATED', payload: res.data});
-//             }).catch(e => {
-//             console.log(e)
-//         });
-//     };
-// };
 
+export const changeCardOrder = (source, destination,order) => {
+    const newOrder = order.slice();
+    let card;
+    newOrder.map(item => {
+        if(item.listId === source.droppableId){
+            console.log(order);
+            card = item.cards[source.index];
+            item.cards.splice(source.index, 1);
+        }
+    });
+    newOrder.map(item => {
+        if(item.listId === destination.droppableId){
+            item.cards.splice(destination.index, 0, card);
+        }
+    });
+    console.log(newOrder, );
+    return dispatch => {
+        axios.put('/cardOrder/1',{ cards: newOrder })
+            .then(res => {
+                dispatch({type : 'CARD_ORDER_UPDATED', payload: res.data.cards});
+            })
+            .catch(e => console.log(e))
+    };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+};
 

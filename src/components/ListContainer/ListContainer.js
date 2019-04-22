@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
-import { addList, lists, cards, listOrder, changeListOrder, cardOrder  } from '../../store/action';
+import { addList, lists, cards, listOrder, changeListOrder, cardOrder, changeCardOrder  } from '../../store/action';
 
 
 import List from './List/List';
@@ -15,7 +15,7 @@ class Logo extends Component {
     
     handleSubmit = (values) => {
         this.setState({isShow: false});
-        this.props.addList( values.title );
+        this.props.addList( values );
     };
 
     componentDidMount(){
@@ -36,9 +36,12 @@ class Logo extends Component {
             return;
         }
         if(type === 'list'){
+            console.log(source,destination);
             this.props.changeListOrder(source.index, destination.index, this.props.listsOrder);
         }else if(type === 'card'){
+            console.log(source,destination);
 
+            this.props.changeCardOrder(source, destination, this.props.cardsOrder);
         }
     };
 
@@ -65,7 +68,7 @@ class Logo extends Component {
                                     <AddListsForm onSubmit={this.handleSubmit}/>
                                 ) : (
                                     <button className="add-list-btn btn"
-                                            onClick={() => this.setState({isShow: true})}>Add a card</button>
+                                            onClick={() => this.setState({isShow: true})}>Add a List</button>
                                 )
                             }
                         </div>
@@ -90,7 +93,8 @@ const mapDispatchToProps = {
     addList,
     listOrder,
     changeListOrder,
-    cardOrder
+    cardOrder,
+    changeCardOrder
 };
 export default connect (mapStateToProps, mapDispatchToProps)(Logo);
 
